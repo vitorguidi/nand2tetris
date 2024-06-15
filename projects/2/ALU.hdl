@@ -42,4 +42,35 @@ CHIP ALU {
 
     PARTS:
     //// Replace this comment with your code.
+
+    //// Zero/negate x as needed
+    Mux16(a=x,b[0]=false, sel=zx, out=maybezeroedx);
+    Not16(in=maybezeroedx, out=maybenegatedx);
+    Mux16(a=maybezeroedx, b=maybenegatedx, sel=nx, out=processedx);
+
+    //// Zero/negate y as needed
+    Mux16(a=y,b[0]=false, sel=zy, out=maybezeroedy);
+    Not16(in=maybezeroedy, out=maybenegatedy);
+    Mux16(a=maybezeroedy, b=maybenegatedy, sel=ny, out=processedy);
+
+    //// Do plus or and
+    And16(a=processedx, b=processedy, out=andxy);
+    Add16(a=processedx, b=processedy, out=plusxy);
+    Mux16(a=andxy, b=plusxy, sel=f, out=fxy);
+
+    //// Maybe negate output
+    Not16(in=fxy, out=maybenegatefxy);
+    Mux16(a=fxy, b=maybenegatefxy, sel=no, out=preout);
+    Or16(a=preout, b[0]=false, out=out);
+
+
+    //// Check negative, trivial for 2 complement: most significant bit is 0
+    Or16(a=preout, b[0..15]=false, out[15]=ng, out[0..7]=pre07, out[8..15]=pre815);
+
+
+    //// Check if number is 0, reuse or8way
+    Or8Way(in=pre07, out=firsthalfofout);
+    Or8Way(in=pre815, out=secondhalfofout);
+    Or(a=firsthalfofout, b=secondhalfofout, out=out016);
+    Not(in=out016, out=zr);
 }
