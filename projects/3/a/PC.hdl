@@ -15,4 +15,28 @@ CHIP PC {
     
     PARTS:
     //// Replace this comment with your code.
+
+    //logic for register load pin
+    Or(a=load, b=inc, out=halfload);
+    Or(a=halfload, b=reset, out=shoudload);
+
+    // zero array
+    Not16(in=in, out=notin);
+    And16(a=notin,b=in,out=zero);
+
+    // incremented in
+    ALU(x=feedbackout, y=zero, zx=false, nx=true, zy=true, ny=true, f=true, no=true  , out=incrementedout, zr=aluoutiszero, ng=aluoutisneg);
+
+    Mux16(a=in, b=zero, sel=reset, out=intermediateout0);
+
+    Not(in=reset, out=notreset);
+    And(a=notreset, b=load, out=loadandnotreset);
+    Mux16(a=intermediateout0, b=in, sel=loadandnotreset, out=intermediateout1);
+
+    Not(in=load, out=notload);
+    And(a=notload, b=inc, out=incandnotload);
+    And(a=incandnotload, b=notreset, out=notresetandnotloadandinc);
+    Mux16(a=intermediateout1, b=incrementedout, sel=notresetandnotloadandinc, out=processedin);
+
+    Register(in=processedin, load=shoudload, out=feedbackout, out=out);
 }

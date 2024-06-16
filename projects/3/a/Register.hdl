@@ -14,4 +14,51 @@ CHIP Register {
 
     PARTS:
     //// Replace this comment with your code.
+    Mux(a=feedbackdff0, b=in[0], sel=load, out=muxout0);
+DFF(in=muxout0, out=out[0], out=feedbackdff0);
+
+Mux(a=feedbackdff1, b=in[1], sel=load, out=muxout1);
+DFF(in=muxout1, out=out[1], out=feedbackdff1);
+
+Mux(a=feedbackdff2, b=in[2], sel=load, out=muxout2);
+DFF(in=muxout2, out=out[2], out=feedbackdff2);
+
+Mux(a=feedbackdff3, b=in[3], sel=load, out=muxout3);
+DFF(in=muxout3, out=out[3], out=feedbackdff3);
+
+Mux(a=feedbackdff4, b=in[4], sel=load, out=muxout4);
+DFF(in=muxout4, out=out[4], out=feedbackdff4);
+
+Mux(a=feedbackdff5, b=in[5], sel=load, out=muxout5);
+DFF(in=muxout5, out=out[5], out=feedbackdff5);
+
+Mux(a=feedbackdff6, b=in[6], sel=load, out=muxout6);
+DFF(in=muxout6, out=out[6], out=feedbackdff6);
+
+Mux(a=feedbackdff7, b=in[7], sel=load, out=muxout7);
+DFF(in=muxout7, out=out[7], out=feedbackdff7);
+
+Mux(a=feedbackdff8, b=in[8], sel=load, out=muxout8);
+DFF(in=muxout8, out=out[8], out=feedbackdff8);
+
+Mux(a=feedbackdff9, b=in[9], sel=load, out=muxout9);
+DFF(in=muxout9, out=out[9], out=feedbackdff9);
+
+Mux(a=feedbackdff10, b=in[10], sel=load, out=muxout10);
+DFF(in=muxout10, out=out[10], out=feedbackdff10);
+
+Mux(a=feedbackdff11, b=in[11], sel=load, out=muxout11);
+DFF(in=muxout11, out=out[11], out=feedbackdff11);
+
+Mux(a=feedbackdff12, b=in[12], sel=load, out=muxout12);
+DFF(in=muxout12, out=out[12], out=feedbackdff12);
+
+Mux(a=feedbackdff13, b=in[13], sel=load, out=muxout13);
+DFF(in=muxout13, out=out[13], out=feedbackdff13);
+
+Mux(a=feedbackdff14, b=in[14], sel=load, out=muxout14);
+DFF(in=muxout14, out=out[14], out=feedbackdff14);
+
+Mux(a=feedbackdff15, b=in[15], sel=load, out=muxout15);
+DFF(in=muxout15, out=out[15], out=feedbackdff15);
 }
