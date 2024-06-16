@@ -8,3 +8,29 @@
 // The algorithm is based on repetitive addition.
 
 //// Replace this comment with your code.
+
+(MULT)
+    @R2
+    M=0
+    @R1
+    D=M
+    @SUM
+    D;JGT
+    @LOOP
+    D;JEQ
+
+(SUM)
+    @R0
+    D=M
+    @R2
+    M=M+D
+    @R1
+    M=M-1
+    @R1
+    D=M
+    @SUM
+    D;JGT
+
+(LOOP)
+    @LOOP
+    0;JMP
