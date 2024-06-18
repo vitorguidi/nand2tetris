@@ -33,4 +33,46 @@ CHIP CPU {
 
     PARTS:
 	//// Replace this comment with your code.
+
+    //Figure out which instruction type
+    Not(in=instruction[15], out=AInstruction);
+    Not(in=AInstruction, out=CInstruction);
+
+    //Do A Register business
+    And(a=CInstruction, b=instruction[5], out=ALUToA);
+    Mux16(a=instruction, b=ALUOut, sel=ALUToA, out=AIn);
+    Or(a=ALUToA, b=AInstruction, out=LoadA);
+    ARegister(in=AIn,load=LoadA,out=AOut);
+
+    //D is always first operando on ALU. Figure out if second is A or M
+    Mux16(a=AOut, b=inM, sel=instruction[12], out=SecondOperand);
+
+    ALU(x=DOut,y=SecondOperand,
+        zx=instruction[11],nx=instruction[10],zy=instruction[9],ny=instruction[8],
+        f=instruction[7],no=instruction[6],out=ALUOut,zr=ZROut,ng=NGOut);
+
+    // Fill D register if necessary
+    And(a=CInstruction, b=instruction[4], out=LoadD);
+    DRegister(in=ALUOut,load=LoadD,out=DOut);
+
+    // Fill memory if necessary
+    And(a=CInstruction, b=instruction[3], out=writeM);
+    Or16(a=false, b=AOut, out[0..14]=addressM);
+    Or16(a=false, b=ALUOut, out=outM);
+
+    //Program counter logic
+    And(a=NGOut, b=instruction[2], out=JLT);
+    And(a=ZROut, b=instruction[1], out=JEQ);
+
+    Or(a=NGOut, b=ZROut, out=NonPositiveResult);
+    Not(in=NonPositiveResult, out=PositiveResult);
+    And(a=PositiveResult, b=instruction[0], out=JGT);
+
+    Or(a=JLT, b=JEQ, out=JLE);
+    Or(a=JLE, b=JGT, out=JMP);
+
+    And(a=JMP, b=CInstruction, out=SHOULDJMP);
+    Not(in=SHOULDJMP, out=SHOULDNOTJMP);
+
+    PC(in=AOut,inc=SHOULDNOTJMP,load=SHOULDJMP,reset=reset,out[0..14]=pc);
 }
